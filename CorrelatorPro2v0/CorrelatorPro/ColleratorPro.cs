@@ -69,29 +69,33 @@ namespace CorrelatorPro
             WriteToDataGridView(dgvTemp,Xi, Yi, XiYi, Xi2, Yi2, Xi.Length);
 
             // Найдем средние значения
-            double avgXi = Xi.Sum() / Xi.Length;
-            double avgYi = Yi.Sum() / Yi.Length;
-            double avgXiYi = XiYi.Sum() / XiYi.Length;
+            double avgXi = Xi.Average();
+            double avgYi = Yi.Average();
+            double avgXiYi = XiYi.Average();
             //Найдем средние квадратичные отклонения случайных величин X и Y
-            double avgDevX = Math.Sqrt((Xi2.Sum() / Xi2.Length) - Math.Pow(avgXi, 2.0));
-            double avgDevY = Math.Sqrt((Yi2.Sum() / Yi2.Length) - Math.Pow(avgYi, 2.0));
+            double avgDevX = Math.Sqrt(Xi2.Average()- Math.Pow(avgXi, 2.0));
+            double avgDevY = Math.Sqrt(Yi2.Average() - Math.Pow(avgYi, 2.0));
+
             //Найдем выборочный коэффициент корреляции
-            double rV = ((avgXiYi - avgXi * avgYi) / (avgDevX * avgDevY));
+            double rV = Rv(avgXiYi, avgXi, avgYi, avgDevX, avgDevY);
             string checkrV = CheckConnect(rV);
+
             //Найдем коэффициенты линейной регрессии
-            double roYX = (avgXiYi - avgXi * avgYi) / Math.Pow(avgDevX, 2);
-            double bYX = avgYi - avgXi * roYX;
+            //Посчитали по Y*X
+            double roYX = Ro(avgXiYi, avgXi, avgYi, avgDevX);
+            double bYX = Bo(avgYi, avgXi, roYX);
             double[] outputY = new double[Yi.Length];
-            double[] outputX = new double[Xi.Length];
+            double[] outputX = new double[Xi.Length];        
+            
+            //Посчитали по X*Y
+            double roXY = Ro(avgXiYi, avgXi, avgYi, avgDevY); 
+            double bXY = Bo(avgXi, avgYi, roXY); 
             LineRegressionOutput(out outputY, Xi, roYX, bYX);
-            double roXY = (avgXiYi - avgXi * avgYi) / Math.Pow(avgDevY, 2);
-            double bXY = avgXi - avgYi * roXY;
             LineRegressionOutput(out outputX, Yi, roXY, bXY);
 
         }
 
-
-        public void DrawChart(double[] X, double[] Y, double[] Y1)
+        public void DrawChart(double[] X, double[] Y, double[] Y1, double[] X1)
         {
 
             // Устанавливаем размеры и местоположение Chart
@@ -107,19 +111,25 @@ namespace CorrelatorPro
             ChartOfFunction.ChartAreas.Add(chartArea1);
 
             // Создаем новый объект Series для хранения точек графика
-            Series series1 = new Series();
-            Series series2 = new Series();
-            series1.ChartType = SeriesChartType.Point;
-            series2.ChartType = SeriesChartType.Line;
-            series1.Color = Color.Red;
-            series2.Color = Color.Blue;
-            series1.LegendText = "Эксперименты";
-            series2.LegendText = "Результаты аппроксимации";
+            Series XY_Point = new Series();
+            Series Yx_line = new Series();
+            Series Xy_line = new Series();
+            XY_Point.ChartType = SeriesChartType.Point;
+            Yx_line.ChartType = SeriesChartType.Line;
+            Xy_line.ChartType = SeriesChartType.Line;
+            XY_Point.Color = Color.Red;
+            Yx_line.Color = Color.Green;
+            Xy_line.Color = Color.Blue;
+            Yx_line.LegendText = "Линейная регрессия Yx";
+            XY_Point.LegendText = "Эксперименты(точки)";
+            Xy_line.LegendText = "Линейная регрессия Xy";
+
             // Добавляем точки в Series
             for (int i = 0; i < X.Length; i++)
             {
-                series1.Points.AddXY(X[i], Y[i]);
-                series2.Points.AddXY(X[i], Y1[i]);
+                XY_Point.Points.AddXY(X[i], Y[i]);
+                Yx_line.Points.AddXY(X[i], Y1[i]);
+                Xy_line.Points.AddXY(X1[i], Y[i]);
             }
 
             if (ChartOfFunction.Series.Count > 0)
@@ -128,16 +138,17 @@ namespace CorrelatorPro
             };
 
             // Добавляем Series в Chart
-            ChartOfFunction.Series.Add(series1);
-            ChartOfFunction.Series.Add(series2);
+            ChartOfFunction.Series.Add(XY_Point);
+            ChartOfFunction.Series.Add(Yx_line);
+            ChartOfFunction.Series.Add(Xy_line);
         }
 
-        public static void LineRegressionOutput(out double[] output, double[] InEl, double roYX, double bYX)
+        public static void LineRegressionOutput(out double[] output, double[] InputEl, double roYX, double bYX)
         {
-            output = new double[InEl.Length];
-            for (int i=0; i< InEl.Length;i++)
+            output = new double[InputEl.Length];
+            for (int i=0; i< InputEl.Length;i++)
             {
-                output[i] = (roYX * InEl[i]) - bYX;
+                output[i] = (roYX * InputEl[i]) - bYX;
             }
         }
         /*Метод получения данных из таблицы
@@ -261,6 +272,23 @@ namespace CorrelatorPro
 
             return result;
         }
+
+
+        private double Ro(double avgXY, double avgX, double avgY, double avgDev)
+        {
+            return (avgXY - avgX * avgY) / Math.Pow(avgDev, 2);
+        }
+
+        private double Bo(double avgX, double avgY, double RoRes)
+        {
+            return avgY - avgX * RoRes;
+        }
+
+        private double Rv(double avgXiYi, double avgXi, double avgYi, double avgDevX, double avgDevY)
+        {
+            return ((avgXiYi - avgXi * avgYi) / (avgDevX * avgDevY));
+        }
+
 
     }
 }
