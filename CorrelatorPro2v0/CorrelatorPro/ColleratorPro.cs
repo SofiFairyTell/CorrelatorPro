@@ -73,12 +73,12 @@ namespace CorrelatorPro
             double avgYi = Yi.Average();
             double avgXiYi = XiYi.Average();
             //Найдем средние квадратичные отклонения случайных величин X и Y
-            double avgDevX = Math.Sqrt(Xi2.Average()- Math.Pow(avgXi, 2.0));
-            double avgDevY = Math.Sqrt(Yi2.Average() - Math.Pow(avgYi, 2.0));
+            double avgDevX = CalculateStandardDeviation(Xi2, avgXi);
+            double avgDevY = CalculateStandardDeviation(Yi2, avgYi);
 
             //Найдем выборочный коэффициент корреляции
             double rV = Rv(avgXiYi, avgXi, avgYi, avgDevX, avgDevY);
-            string checkrV = CheckConnect(rV);
+           //string checkrV = CheckConnect(rV);
 
             //Найдем коэффициенты линейной регрессии
             //Посчитали по Y*X
@@ -92,8 +92,20 @@ namespace CorrelatorPro
             double bXY = Bo(avgXi, avgYi, roXY); 
             LineRegressionOutput(out outputY, Xi, roYX, bYX);
             LineRegressionOutput(out outputX, Yi, roXY, bXY);
-
+            DisplayResult(rV, roXY, bYX, roYX, bXY, avgDevX, avgDevY);
+            DrawChart(Xi,Yi, outputY, outputX);
         }
+
+        private void DisplayResult(double rV, double roXY, double bYX, double roYX, double bXY, double avgDevX, double avgDevY)
+        {
+            textboxAnswer.Clear();
+            string result = "Коэффициент корреляции: " + rV.ToString() + " " + CheckConnect(rV)+"\n ";
+            result = result + "Коэффициенты линейной регрессии Y*X: ро = " + roXY.ToString() + " b=" + bXY.ToString() + "\n ";
+            result = result + "Коэффициенты линейной регрессии X*Y: ро = " + roYX.ToString() + " b=" + bYX.ToString() + "\n ";
+            result = result + "Средне-квадратичное отклонения: devX = " + avgDevX.ToString() + " devY=" + avgDevY.ToString() + "\n ";
+            textboxAnswer.Text = result;
+        }
+
 
         public void DrawChart(double[] X, double[] Y, double[] Y1, double[] X1)
         {
@@ -151,6 +163,7 @@ namespace CorrelatorPro
                 output[i] = (roYX * InputEl[i]) - bYX;
             }
         }
+       
         /*Метод получения данных из таблицы
          * @param таблица DataGridView
          * @return массив Xi и Yi
@@ -273,7 +286,6 @@ namespace CorrelatorPro
             return result;
         }
 
-
         private double Ro(double avgXY, double avgX, double avgY, double avgDev)
         {
             return (avgXY - avgX * avgY) / Math.Pow(avgDev, 2);
@@ -289,6 +301,10 @@ namespace CorrelatorPro
             return ((avgXiYi - avgXi * avgYi) / (avgDevX * avgDevY));
         }
 
+        private double CalculateStandardDeviation(double[] ArrayPow2, double ArrayAvg)
+        {
+            return Math.Sqrt(ArrayPow2.Average() - Math.Pow(ArrayAvg, 2.0));
+        }
 
     }
 }

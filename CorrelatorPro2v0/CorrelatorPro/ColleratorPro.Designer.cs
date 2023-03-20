@@ -47,6 +47,7 @@ namespace CorrelatorPro
             this.dgvTemp = new System.Windows.Forms.DataGridView();
             this.btLineRegCount = new System.Windows.Forms.Button();
             this.tbPageSq = new System.Windows.Forms.TabPage();
+            this.textboxAnswer = new System.Windows.Forms.TextBox();
             this.tbLineReg.SuspendLayout();
             this.tbPageTask.SuspendLayout();
             this.grParam.SuspendLayout();
@@ -65,7 +66,7 @@ namespace CorrelatorPro
             this.tbLineReg.Location = new System.Drawing.Point(13, 13);
             this.tbLineReg.Name = "tbLineReg";
             this.tbLineReg.SelectedIndex = 0;
-            this.tbLineReg.Size = new System.Drawing.Size(775, 395);
+            this.tbLineReg.Size = new System.Drawing.Size(775, 452);
             this.tbLineReg.TabIndex = 0;
             // 
             // tbPageTask
@@ -164,6 +165,7 @@ namespace CorrelatorPro
             // tbPageLine
             // 
             this.tbPageLine.BackColor = System.Drawing.Color.Transparent;
+            this.tbPageLine.Controls.Add(this.textboxAnswer);
             this.tbPageLine.Controls.Add(this.ChartOfFunction);
             this.tbPageLine.Controls.Add(this.dgvTemp);
             this.tbPageLine.Controls.Add(this.btLineRegCount);
@@ -171,7 +173,7 @@ namespace CorrelatorPro
             this.tbPageLine.Location = new System.Drawing.Point(4, 23);
             this.tbPageLine.Name = "tbPageLine";
             this.tbPageLine.Padding = new System.Windows.Forms.Padding(3);
-            this.tbPageLine.Size = new System.Drawing.Size(767, 368);
+            this.tbPageLine.Size = new System.Drawing.Size(767, 425);
             this.tbPageLine.TabIndex = 0;
             this.tbPageLine.Text = "Линейная регрессия";
             // 
@@ -181,13 +183,13 @@ namespace CorrelatorPro
             this.ChartOfFunction.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.ChartOfFunction.Legends.Add(legend1);
-            this.ChartOfFunction.Location = new System.Drawing.Point(396, 46);
+            this.ChartOfFunction.Location = new System.Drawing.Point(319, 6);
             this.ChartOfFunction.Name = "ChartOfFunction";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.ChartOfFunction.Series.Add(series1);
-            this.ChartOfFunction.Size = new System.Drawing.Size(300, 300);
+            this.ChartOfFunction.Size = new System.Drawing.Size(442, 283);
             this.ChartOfFunction.TabIndex = 2;
             this.ChartOfFunction.Text = "chart1";
             // 
@@ -199,7 +201,7 @@ namespace CorrelatorPro
             this.dgvTemp.Location = new System.Drawing.Point(7, 46);
             this.dgvTemp.Name = "dgvTemp";
             this.dgvTemp.RowTemplate.Height = 25;
-            this.dgvTemp.Size = new System.Drawing.Size(356, 316);
+            this.dgvTemp.Size = new System.Drawing.Size(297, 243);
             this.dgvTemp.TabIndex = 1;
             // 
             // btLineRegCount
@@ -224,11 +226,19 @@ namespace CorrelatorPro
             this.tbPageSq.Text = "Квадратичная регрессия";
             this.tbPageSq.UseVisualStyleBackColor = true;
             // 
+            // textboxAnswer
+            // 
+            this.textboxAnswer.Location = new System.Drawing.Point(7, 309);
+            this.textboxAnswer.Multiline = true;
+            this.textboxAnswer.Name = "textboxAnswer";
+            this.textboxAnswer.Size = new System.Drawing.Size(754, 110);
+            this.textboxAnswer.TabIndex = 3;
+            // 
             // frmCorrellatorPro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 420);
+            this.ClientSize = new System.Drawing.Size(800, 477);
             this.Controls.Add(this.tbLineReg);
             this.Font = new System.Drawing.Font("Consolas", 9F);
             this.ForeColor = System.Drawing.SystemColors.ControlLight;
@@ -243,6 +253,7 @@ namespace CorrelatorPro
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgwData)).EndInit();
             this.tbPageLine.ResumeLayout(false);
+            this.tbPageLine.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartOfFunction)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTemp)).EndInit();
             this.ResumeLayout(false);
@@ -264,6 +275,7 @@ namespace CorrelatorPro
         private System.Windows.Forms.Button btLineRegCount;
         private System.Windows.Forms.DataGridView dgvTemp;
         public System.Windows.Forms.DataVisualization.Charting.Chart ChartOfFunction;
+        public System.Windows.Forms.TextBox textboxAnswer;
     }
 }
 
