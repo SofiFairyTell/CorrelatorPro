@@ -44,9 +44,8 @@ namespace CorrelatorPro
             }
 
             //// Добавляем две строки
-            //dgwData.Rows.Add();
+            dgwData.Rows.Add(2);
             //dgwData.Rows[0].Cells[0].Value = "Количество Авто";
-            //dgwData.Rows.Add();
             //dgwData.Rows[1].Cells[0].Value = "Затраты на рекламу";
         }
 
@@ -64,7 +63,7 @@ namespace CorrelatorPro
             double[] Yi2 = new double[Yi.Length];
             //Получим их квадраты
             Xi2 = SquareArrayElements(Xi);
-            Yi2 = SquareArrayElements(Yi2);
+            Yi2 = SquareArrayElements(Yi);
 
             WriteToDataGridView(dgvTemp,Xi, Yi, XiYi, Xi2, Yi2, Xi.Length);
 

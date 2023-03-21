@@ -30,6 +30,7 @@ namespace CorrelatorPro
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCorrellatorPro));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
@@ -48,6 +49,8 @@ namespace CorrelatorPro
             this.btLineRegCount = new System.Windows.Forms.Button();
             this.tbPageSq = new System.Windows.Forms.TabPage();
             this.textboxAnswer = new System.Windows.Forms.TextBox();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbLineReg.SuspendLayout();
             this.tbPageTask.SuspendLayout();
             this.grParam.SuspendLayout();
@@ -76,7 +79,7 @@ namespace CorrelatorPro
             this.tbPageTask.Location = new System.Drawing.Point(4, 23);
             this.tbPageTask.Name = "tbPageTask";
             this.tbPageTask.Padding = new System.Windows.Forms.Padding(3);
-            this.tbPageTask.Size = new System.Drawing.Size(767, 368);
+            this.tbPageTask.Size = new System.Drawing.Size(767, 425);
             this.tbPageTask.TabIndex = 2;
             this.tbPageTask.Text = "Задание";
             this.tbPageTask.UseVisualStyleBackColor = true;
@@ -136,8 +139,12 @@ namespace CorrelatorPro
             // 
             this.dgwData.AllowUserToAddRows = false;
             this.dgwData.AllowUserToDeleteRows = false;
+            this.dgwData.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
             this.dgwData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgwData.GridColor = System.Drawing.SystemColors.Control;
+            this.dgwData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2});
+            this.dgwData.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.dgwData.Location = new System.Drawing.Point(6, 99);
             this.dgwData.Name = "dgwData";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -148,6 +155,11 @@ namespace CorrelatorPro
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dgwData.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.dgwData.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgwData.RowTemplate.Height = 25;
             this.dgwData.Size = new System.Drawing.Size(732, 101);
             this.dgwData.TabIndex = 0;
@@ -234,6 +246,16 @@ namespace CorrelatorPro
             this.textboxAnswer.Size = new System.Drawing.Size(754, 110);
             this.textboxAnswer.TabIndex = 3;
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
             // frmCorrellatorPro
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -271,11 +293,13 @@ namespace CorrelatorPro
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label lbCount;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dgwData;
         private System.Windows.Forms.Button btLineRegCount;
         private System.Windows.Forms.DataGridView dgvTemp;
         public System.Windows.Forms.DataVisualization.Charting.Chart ChartOfFunction;
         public System.Windows.Forms.TextBox textboxAnswer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        public System.Windows.Forms.DataGridView dgwData;
     }
 }
 
