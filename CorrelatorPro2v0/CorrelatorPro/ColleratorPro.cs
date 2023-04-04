@@ -82,15 +82,20 @@ namespace CorrelatorPro
             //Найдем коэффициенты линейной регрессии
             //Посчитали по Y*X
             double roYX = Ro(avgXiYi, avgXi, avgYi, avgDevX);
-            double bYX = Bo(avgYi, avgXi, roYX);
+            double bYX = Bo(avgXi , avgYi, roYX);
             double[] outputY = new double[Yi.Length];
             double[] outputX = new double[Xi.Length];        
             
             //Посчитали по X*Y
             double roXY = Ro(avgXiYi, avgXi, avgYi, avgDevY); 
-            double bXY = Bo(avgXi, avgYi, roXY); 
+            double bXY = Bo(avgYi, avgXi , roXY);
+
+            //Искомое уравнение Y*X
             LineRegressionOutput(out outputY, Xi, roYX, bYX);
+            //Искомое уравнение X*Y
             LineRegressionOutput(out outputX, Yi, roXY, bXY);
+
+
             DisplayResult(rV, roXY, bYX, roYX, bXY, avgDevX, avgDevY);
             DrawChart(Xi,Yi, outputY, outputX);
         }
@@ -104,7 +109,13 @@ namespace CorrelatorPro
             result = result + "Средне-квадратичное отклонения: devX = " + avgDevX.ToString() + " devY=" + avgDevY.ToString() + "\n ";
             textboxAnswer.Text = result;
         }
-
+        private void DisplayResult(double A, double B, double C)
+        {
+            qdrAnswerBox.Clear();
+            string result = "y=: " + A.ToString() + "*Xi^2 +" + B.ToString() + "*Xi +"+C.ToString();
+            qdrAnswerBox.Text = result;
+        }
+        
 
         public void DrawChart(double[] X, double[] Y, double[] Y1, double[] X1)
         {
@@ -140,7 +151,7 @@ namespace CorrelatorPro
             {
                 XY_Point.Points.AddXY(X[i], Y[i]);
                 Yx_line.Points.AddXY(X[i], Y1[i]);
-                Xy_line.Points.AddXY(X1[i], Y[i]);
+                Xy_line.Points.AddXY(X1[i], Y[i]);//+
             }
 
             if (ChartOfFunction.Series.Count > 0)
@@ -154,15 +165,67 @@ namespace CorrelatorPro
             ChartOfFunction.Series.Add(Xy_line);
         }
 
-        public static void LineRegressionOutput(out double[] output, double[] InputEl, double roYX, double bYX)
+        public void DrawChart(double[] X, double[] Y, double[] Y1)
+        {
+
+            // Устанавливаем размеры и местоположение Chart
+            ChartOfFunctionSQR.Size = new Size(380, 330);
+
+            // Создаем новую область Chart
+            ChartArea chart1 = new ChartArea();
+            if (ChartOfFunctionSQR.ChartAreas.Count > 0)
+            {
+                ChartOfFunctionSQR.ChartAreas.Clear();
+            };
+            ChartOfFunctionSQR.ChartAreas.Add(chart1);
+
+            // Создаем новый объект Series для хранения точек графика
+            Series XY_Point = new Series();
+            Series Yx_line = new Series();
+            XY_Point.ChartType = SeriesChartType.Point;
+            Yx_line.ChartType = SeriesChartType.Spline;
+            XY_Point.Color = Color.Red;
+            Yx_line.Color = Color.Green;
+            Yx_line.LegendText = "Квадратичная регрессия Yx";
+            XY_Point.LegendText = "Эксперименты(точки)";
+
+            // Добавляем точки в Series
+            for (int i = 0; i < X.Length; i++)
+            {
+                XY_Point.Points.AddXY(X[i], Y[i]);
+                Yx_line.Points.AddXY(X[i], Y1[i]);
+            }
+
+            if (ChartOfFunctionSQR.Series.Count > 0)
+            {
+                ChartOfFunctionSQR.Series.Clear();
+            };
+
+            // Добавляем Series в Chart
+            ChartOfFunctionSQR.Series.Add(XY_Point);
+            
+            ChartOfFunctionSQR.Series.Add(Yx_line);
+            ChartOfFunctionSQR.Series[0].BorderWidth = 5;
+        }
+        public static void LineRegressionOutput(out double[] output, double[] InputEl, double roXY, double bXY)
         {
             output = new double[InputEl.Length];
             for (int i=0; i< InputEl.Length;i++)
             {
-                output[i] = (roYX * InputEl[i]) - bYX;
+                output[i] = (roXY * InputEl[i]) + bXY;
             }
         }
-       
+
+        public static void QuadraticRegressionOutput(out double[] output, double[] Xi2, double[] Xi, double A, double B, double C)
+        {
+            int size = Xi2.Length;
+            output = new double[Xi2.Length];
+            for (int i = 0; i < size; i++)
+            {
+                output[i] = A * Xi2[i] + B * Xi[i] + C;
+            }
+        }
+
         /*Метод получения данных из таблицы
          * @param таблица DataGridView
          * @return массив Xi и Yi
@@ -250,9 +313,39 @@ namespace CorrelatorPro
             dgv.Rows[dgv.Rows.Count - 1].Cells[2].Value = XiYi.Sum();
             dgv.Rows[dgv.Rows.Count - 1].Cells[3].Value = XiSqr.Sum();
             dgv.Rows[dgv.Rows.Count - 1].Cells[4].Value = YiSqr.Sum();
+
+            dgv.ForeColor = Color.Black;
         }
 
+        private void WriteToDataGridView(DataGridView dgv, double[] Xi, double[] Yi, double[] XiYi, double[] XiSqr, double[] Xi3, double[] Xi4, double[] XiSqrYi, int size)
+        {
+            dgv2.Rows.Clear();
+            dgv2.Columns.Clear();
 
+            dgv2.ColumnCount = 7;
+
+            dgv2.Columns[0].HeaderText = "Xi";
+            dgv2.Columns[1].HeaderText = "Yi";
+            dgv2.Columns[2].HeaderText = "Xi^2";
+            dgv2.Columns[3].HeaderText = "Xi^3";
+            dgv2.Columns[4].HeaderText = "Xi^4";
+            dgv2.Columns[5].HeaderText = "XiYi";
+            dgv2.Columns[6].HeaderText = "Xi2Yi";
+
+            for (int i = 0; i < size; i++)
+            {
+                dgv2.Rows.Add(Xi[i], Yi[i], XiSqr[i],Xi3[i],Xi4[i], XiSqrYi[i]);
+            }
+
+            //dgv.Rows.Add("SumXi", "SumYi", "SumXiYi", "SumXi2", "SumYi2", "");
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[0].Value = Xi.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[1].Value = Yi.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[2].Value = XiSqr.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[3].Value = Xi3.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[4].Value = Xi4.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[5].Value = XiYi.Sum();
+            dgv2.Rows[dgv2.Rows.Count - 1].Cells[6].Value = XiSqrYi.Sum();
+        }
 
         //Вот это добро ниже надо бы в отдельный класс.
         //Но на часах уже за полночь
@@ -270,7 +363,7 @@ namespace CorrelatorPro
 
             return result;
         }
-
+        #region Степенные функции
         private double[] SquareArrayElements(double[] array)
         {
             int length = array.Length;
@@ -284,7 +377,35 @@ namespace CorrelatorPro
 
             return result;
         }
+        private double[] CubeArrayElements(double[] array)
+        {
+            int length = array.Length;
+            double[] result = new double[length];
 
+            // Возводим в квадрат каждый элемент массива и сохраняем результаты в новом массиве
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = Math.Pow(array[i], 3);
+            }
+
+            return result;
+        }
+        private double[] ForPowArrayElements(double[] array)
+        {
+            int length = array.Length;
+            double[] result = new double[length];
+
+            // Возводим в квадрат каждый элемент массива и сохраняем результаты в новом массиве
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = Math.Pow(array[i], 4);
+            }
+
+            return result;
+        }
+        #endregion       
+        
+        #region Вычисление коэффициентов
         private double Ro(double avgXY, double avgX, double avgY, double avgDev)
         {
             return (avgXY - avgX * avgY) / Math.Pow(avgDev, 2);
@@ -299,10 +420,80 @@ namespace CorrelatorPro
         {
             return ((avgXiYi - avgXi * avgYi) / (avgDevX * avgDevY));
         }
-
+        #endregion
+        
         private double CalculateStandardDeviation(double[] ArrayPow2, double ArrayAvg)
         {
             return Math.Sqrt(ArrayPow2.Average() - Math.Pow(ArrayAvg, 2.0));
+        }
+
+        private void btnSqrRegCount_Click(object sender, EventArgs e)
+        {
+            int columnCount = dgwData.Columns.Count;
+            double[] Xi = new double[columnCount];
+            double[] Yi = new double[columnCount];
+            //Получим данные из таблицы
+            GetDataFromDataGridView(dgwData, out Xi, out Yi);
+            //Получим результат умножения друг на друга Xi, Yi
+            double[] XiYi = new double[Xi.Length];
+            XiYi = MultiplyArrays(Xi, Yi);
+            // Получим нужные степени Xi
+            double[] Xi2 = new double[Xi.Length];
+            double[] Xi3 = new double[Xi.Length];
+            double[] Xi4 = new double[Xi.Length];
+
+            Xi2 = SquareArrayElements(Xi);
+            Xi3 = CubeArrayElements(Xi);
+            Xi4 = ForPowArrayElements(Xi);
+
+            //Получим значение Xi2Yi
+            double[] Xi2Yi = new double[Xi2.Length];
+            Xi2Yi = MultiplyArrays(Xi2, Yi);
+
+            //Выведем в таблицу расчетные данные
+            WriteToDataGridView(dgvTemp, Xi, Yi, XiYi,Xi2,Xi3, Xi4, Xi2Yi, Xi.Length);
+            double A = 0.0, B = 0.0, C = 0.0;
+            CalculateDeterminant(out A, out B, out C, Xi, Yi, Xi2, Xi3, Xi4, XiYi, Xi2Yi, Xi.Length);
+           
+            double[] outputY = new double[Yi.Length];
+            QuadraticRegressionOutput(out outputY, Xi2, Xi, A, B, C);
+
+            DisplayResult(A, B, C);
+
+            DrawChart(Xi, Yi, outputY);
+
+        }
+
+        public void CalculateDeterminant(out double A, out double B, out double C, double[] Xi, double[] Yi, double[] Xi2,double[] Xi3, double[] Xi4,double[] XiYi, double[] Xi2Yi, int N)
+        {
+            double sumXi = 0, sumYi = 0, sumXiYi = 0, sumXi2 = 0, sumXi3 = 0, sumXi4= 0, sumXi2Yi= 0;
+
+            // вычисляем все необходимые суммы
+            sumXi = Xi.Sum();
+            sumYi = Yi.Sum();
+            sumXiYi = XiYi.Sum();
+            sumXi2 = Xi2.Sum();
+            sumXi3 = Xi3.Sum();
+            sumXi4 = Xi4.Sum();
+            sumXi2Yi = Xi2Yi.Sum();
+
+
+            double determinant = Math.Pow(sumXi2, 3) + Math.Pow(sumXi3, 2) * N + Math.Pow(sumXi, 2) * sumXi4
+                                - N * sumXi2 * sumXi4 - sumXi3 * sumXi2 * sumXi - sumXi3 * sumXi2 * sumXi;
+
+            double detA = sumYi*sumXi2* sumXi2 + sumXiYi*sumXi3 * N + sumXi*sumXi * sumXi2Yi
+                                - N * sumXi2 * sumXi2Yi - sumXiYi* sumXi2 * sumXi - sumXi3 * sumYi*sumXi;
+
+            double detB = sumXiYi * sumXi2*sumXi2 + sumXi2Yi * sumXi3 * N + sumXi4*sumXi * sumYi
+                    - N * sumXiYi*sumXi4 - sumXi2*sumXi2Yi*sumXi-sumXi3*sumYi*sumXi2;
+
+            double detC = sumXi2Yi * Math.Pow(sumXi2, 2) + Math.Pow(sumXi3, 2) * sumYi + sumXi4 * sumXi * sumXiYi
+                            - sumYi * sumXi4 * sumXi2 - sumXi3 * sumXi2Yi * sumXi - sumXiYi *sumXi3*sumXi2;
+
+            A = detA / determinant;
+            B = detB / determinant;
+            C = detC / determinant;
+
         }
 
     }

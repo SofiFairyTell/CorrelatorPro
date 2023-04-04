@@ -35,6 +35,10 @@ namespace CorrelatorPro
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tbLineReg = new System.Windows.Forms.TabControl();
             this.tbPageTask = new System.Windows.Forms.TabPage();
             this.grParam = new System.Windows.Forms.GroupBox();
@@ -42,15 +46,19 @@ namespace CorrelatorPro
             this.lbCount = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dgwData = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.richTextBoxTask = new System.Windows.Forms.RichTextBox();
             this.tbPageLine = new System.Windows.Forms.TabPage();
+            this.textboxAnswer = new System.Windows.Forms.TextBox();
             this.ChartOfFunction = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dgvTemp = new System.Windows.Forms.DataGridView();
             this.btLineRegCount = new System.Windows.Forms.Button();
             this.tbPageSq = new System.Windows.Forms.TabPage();
-            this.textboxAnswer = new System.Windows.Forms.TextBox();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.qdrAnswerBox = new System.Windows.Forms.TextBox();
+            this.dgv2 = new System.Windows.Forms.DataGridView();
+            this.ChartOfFunctionSQR = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.btnSqrRegCount = new System.Windows.Forms.Button();
             this.tbLineReg.SuspendLayout();
             this.tbPageTask.SuspendLayout();
             this.grParam.SuspendLayout();
@@ -59,6 +67,9 @@ namespace CorrelatorPro
             this.tbPageLine.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartOfFunction)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTemp)).BeginInit();
+            this.tbPageSq.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartOfFunctionSQR)).BeginInit();
             this.SuspendLayout();
             // 
             // tbLineReg
@@ -164,6 +175,16 @@ namespace CorrelatorPro
             this.dgwData.Size = new System.Drawing.Size(732, 101);
             this.dgwData.TabIndex = 0;
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
             // richTextBoxTask
             // 
             this.richTextBoxTask.Enabled = false;
@@ -189,6 +210,14 @@ namespace CorrelatorPro
             this.tbPageLine.TabIndex = 0;
             this.tbPageLine.Text = "Линейная регрессия";
             // 
+            // textboxAnswer
+            // 
+            this.textboxAnswer.Location = new System.Drawing.Point(7, 336);
+            this.textboxAnswer.Multiline = true;
+            this.textboxAnswer.Name = "textboxAnswer";
+            this.textboxAnswer.Size = new System.Drawing.Size(754, 83);
+            this.textboxAnswer.TabIndex = 3;
+            // 
             // ChartOfFunction
             // 
             chartArea1.Name = "ChartArea1";
@@ -201,7 +230,7 @@ namespace CorrelatorPro
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.ChartOfFunction.Series.Add(series1);
-            this.ChartOfFunction.Size = new System.Drawing.Size(442, 283);
+            this.ChartOfFunction.Size = new System.Drawing.Size(442, 324);
             this.ChartOfFunction.TabIndex = 2;
             this.ChartOfFunction.Text = "chart1";
             // 
@@ -210,6 +239,7 @@ namespace CorrelatorPro
             this.dgvTemp.AllowUserToAddRows = false;
             this.dgvTemp.AllowUserToDeleteRows = false;
             this.dgvTemp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTemp.GridColor = System.Drawing.SystemColors.Control;
             this.dgvTemp.Location = new System.Drawing.Point(7, 46);
             this.dgvTemp.Name = "dgvTemp";
             this.dgvTemp.RowTemplate.Height = 25;
@@ -229,32 +259,73 @@ namespace CorrelatorPro
             // 
             // tbPageSq
             // 
+            this.tbPageSq.Controls.Add(this.qdrAnswerBox);
+            this.tbPageSq.Controls.Add(this.dgv2);
+            this.tbPageSq.Controls.Add(this.ChartOfFunctionSQR);
+            this.tbPageSq.Controls.Add(this.btnSqrRegCount);
             this.tbPageSq.ForeColor = System.Drawing.Color.Transparent;
             this.tbPageSq.Location = new System.Drawing.Point(4, 23);
             this.tbPageSq.Name = "tbPageSq";
             this.tbPageSq.Padding = new System.Windows.Forms.Padding(3);
-            this.tbPageSq.Size = new System.Drawing.Size(767, 368);
+            this.tbPageSq.Size = new System.Drawing.Size(767, 425);
             this.tbPageSq.TabIndex = 1;
             this.tbPageSq.Text = "Квадратичная регрессия";
             this.tbPageSq.UseVisualStyleBackColor = true;
             // 
-            // textboxAnswer
+            // qdrAnswerBox
             // 
-            this.textboxAnswer.Location = new System.Drawing.Point(7, 309);
-            this.textboxAnswer.Multiline = true;
-            this.textboxAnswer.Name = "textboxAnswer";
-            this.textboxAnswer.Size = new System.Drawing.Size(754, 110);
-            this.textboxAnswer.TabIndex = 3;
+            this.qdrAnswerBox.Location = new System.Drawing.Point(0, 336);
+            this.qdrAnswerBox.Multiline = true;
+            this.qdrAnswerBox.Name = "qdrAnswerBox";
+            this.qdrAnswerBox.Size = new System.Drawing.Size(764, 83);
+            this.qdrAnswerBox.TabIndex = 5;
             // 
-            // Column1
+            // dgv2
             // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
+            this.dgv2.AllowUserToAddRows = false;
+            this.dgv2.AllowUserToDeleteRows = false;
+            this.dgv2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Info;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 9F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv2.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dgv2.GridColor = System.Drawing.SystemColors.Control;
+            this.dgv2.Location = new System.Drawing.Point(6, 51);
+            this.dgv2.Name = "dgv2";
+            this.dgv2.RowTemplate.Height = 25;
+            this.dgv2.Size = new System.Drawing.Size(322, 243);
+            this.dgv2.TabIndex = 4;
             // 
-            // Column2
+            // ChartOfFunctionSQR
             // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
+            chartArea2.Name = "ChartArea1";
+            this.ChartOfFunctionSQR.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.ChartOfFunctionSQR.Legends.Add(legend2);
+            this.ChartOfFunctionSQR.Location = new System.Drawing.Point(319, 11);
+            this.ChartOfFunctionSQR.Name = "ChartOfFunctionSQR";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.ChartOfFunctionSQR.Series.Add(series2);
+            this.ChartOfFunctionSQR.Size = new System.Drawing.Size(442, 310);
+            this.ChartOfFunctionSQR.TabIndex = 3;
+            this.ChartOfFunctionSQR.Text = "chart1";
+            // 
+            // btnSqrRegCount
+            // 
+            this.btnSqrRegCount.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnSqrRegCount.Location = new System.Drawing.Point(6, 22);
+            this.btnSqrRegCount.Name = "btnSqrRegCount";
+            this.btnSqrRegCount.Size = new System.Drawing.Size(193, 23);
+            this.btnSqrRegCount.TabIndex = 1;
+            this.btnSqrRegCount.Text = "Рассчитать";
+            this.btnSqrRegCount.UseVisualStyleBackColor = true;
+            this.btnSqrRegCount.Click += new System.EventHandler(this.btnSqrRegCount_Click);
             // 
             // frmCorrellatorPro
             // 
@@ -278,6 +349,10 @@ namespace CorrelatorPro
             this.tbPageLine.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartOfFunction)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTemp)).EndInit();
+            this.tbPageSq.ResumeLayout(false);
+            this.tbPageSq.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ChartOfFunctionSQR)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -300,6 +375,10 @@ namespace CorrelatorPro
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         public System.Windows.Forms.DataGridView dgwData;
+        private System.Windows.Forms.Button btnSqrRegCount;
+        private System.Windows.Forms.DataGridView dgv2;
+        public System.Windows.Forms.DataVisualization.Charting.Chart ChartOfFunctionSQR;
+        public System.Windows.Forms.TextBox qdrAnswerBox;
     }
 }
 
